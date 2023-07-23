@@ -5,9 +5,18 @@ protocol FinanceHomeDependency: Dependency {
   // created by this RIB.
 }
 
-final class FinanceHomeComponent: Component<FinanceHomeDependency> {
+final class FinanceHomeComponent: Component<FinanceHomeDependency>, SuperPayDashboardDependency {
+  var balance: ReadOnlyCurrentValuePublisher<Double> { balancePublisher } // 자식에게는 값을 읽을수만 있는 read only Publisher를 넘겨 줘야 한다. -> Computed 프로퍼티로 { balancePublisher }를 해줘야 한다.
+  private let balancePublisher: CurrentValuePublisher<Double> // 잔액을 업데이트 하고 싶을 때 사용할 Publisher
+                                                              
   
-  // TODO: Declare 'fileprivate' dependencies that are only used by this RIB.
+  init(
+    dependency: FinanceHomeDependency,
+    balance: CurrentValuePublisher<Double>
+  ) {
+    self.balancePublisher = balance
+    super.init(dependency: dependency)
+  }
 }
 
 // MARK: - Builder
@@ -23,10 +32,21 @@ final class FinanceHomeBuilder: Builder<FinanceHomeDependency>, FinanceHomeBuild
   }
   
   func build(withListener listener: FinanceHomeListener) -> FinanceHomeRouting {
-    let _ = FinanceHomeComponent(dependency: dependency)
+    let balancePublisher = CurrentValuePublisher<Double>(1000000000)
+    
+    let component = FinanceHomeComponent(
+      dependency: dependency,
+      balance: balancePublisher
+    )
     let viewController = FinanceHomeViewController()
     let interactor = FinanceHomeInteractor(presenter: viewController)
     interactor.listener = listener
-    return FinanceHomeRouter(interactor: interactor, viewController: viewController)
+    
+    let superPayDashboardBuilder = SuperPayDashboardBuilder(dependency: component)
+    return FinanceHomeRouter(
+      interactor: interactor,
+      viewController: viewController,
+      superPayDashboardBuildable: superPayDashboardBuilder
+    )
   }
 }

@@ -6,7 +6,7 @@ protocol AppHomeRouting: ViewableRouting {
 }
 
 protocol AppHomePresentable: Presentable {
-  var listener: AppHomePresentableListener? { get set }
+  var listener: AppHomePresentableListener? { get set } // 부모 리블렛에게 이벤트를 전달할 때 사용 (delegate pattern)ﬁ
   
   func updateWidget(_ viewModels: [HomeWidgetViewModel])
 }
