@@ -6,15 +6,18 @@ protocol FinanceHomeDependency: Dependency {
 }
 
 final class FinanceHomeComponent: Component<FinanceHomeDependency>, SuperPayDashboardDependency, CardOnFileDashboardDependency {
+  let cardsOnFileRepository: CardOnFileRepository
   var balance: ReadOnlyCurrentValuePublisher<Double> { balancePublisher } // 자식에게는 값을 읽을수만 있는 read only Publisher를 넘겨 줘야 한다. -> Computed 프로퍼티로 { balancePublisher }를 해줘야 한다.
   private let balancePublisher: CurrentValuePublisher<Double> // 잔액을 업데이트 하고 싶을 때 사용할 Publisher
                                                               
   
   init(
     dependency: FinanceHomeDependency,
-    balance: CurrentValuePublisher<Double>
+    balance: CurrentValuePublisher<Double>,
+    cardOnFileRepository: CardOnFileRepository
   ) {
     self.balancePublisher = balance
+    self.cardsOnFileRepository = cardOnFileRepository
     super.init(dependency: dependency)
   }
 }
@@ -36,7 +39,8 @@ final class FinanceHomeBuilder: Builder<FinanceHomeDependency>, FinanceHomeBuild
     
     let component = FinanceHomeComponent(
       dependency: dependency,
-      balance: balancePublisher
+      balance: balancePublisher,
+      cardOnFileRepository: CardOnFileRepositoryImp()
     )
     let viewController = FinanceHomeViewController()
     let interactor = FinanceHomeInteractor(presenter: viewController)
