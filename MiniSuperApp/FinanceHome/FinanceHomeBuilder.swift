@@ -5,7 +5,7 @@ protocol FinanceHomeDependency: Dependency {
   // created by this RIB.
 }
 
-final class FinanceHomeComponent: Component<FinanceHomeDependency>, SuperPayDashboardDependency {
+final class FinanceHomeComponent: Component<FinanceHomeDependency>, SuperPayDashboardDependency, CardOnFileDashboardDependency {
   var balance: ReadOnlyCurrentValuePublisher<Double> { balancePublisher } // 자식에게는 값을 읽을수만 있는 read only Publisher를 넘겨 줘야 한다. -> Computed 프로퍼티로 { balancePublisher }를 해줘야 한다.
   private let balancePublisher: CurrentValuePublisher<Double> // 잔액을 업데이트 하고 싶을 때 사용할 Publisher
                                                               
@@ -43,10 +43,13 @@ final class FinanceHomeBuilder: Builder<FinanceHomeDependency>, FinanceHomeBuild
     interactor.listener = listener
     
     let superPayDashboardBuilder = SuperPayDashboardBuilder(dependency: component)
+    let cardOnFileDashboardBuilder = CardOnFileDashboardBuilder(dependency: component)
+    
     return FinanceHomeRouter(
       interactor: interactor,
       viewController: viewController,
-      superPayDashboardBuildable: superPayDashboardBuilder
+      superPayDashboardBuildable: superPayDashboardBuilder,
+      cardOnFileDashboardBuildable: cardOnFileDashboardBuilder
     )
   }
 }

@@ -4,7 +4,7 @@
 //
 //  Created by Ekko on 2023/07/23.
 //
-
+import Foundation
 import ModernRIBs
 
 protocol SuperPayDashboardDependency: Dependency {
@@ -15,6 +15,7 @@ protocol SuperPayDashboardDependency: Dependency {
 
 final class SuperPayDashboardComponent: Component<SuperPayDashboardDependency>, SuperPayDashboardInteractorDependency {
   // TODO: Declare 'fileprivate' dependencies that are only used by this RIB.
+  var balanceFormatter: NumberFormatter { Formatter.balanceFormatter }
   var balance: ReadOnlyCurrentValuePublisher<Double> { dependency.balance } // dependency로 부터 전달하는 역할만 해주자.
 }
 
