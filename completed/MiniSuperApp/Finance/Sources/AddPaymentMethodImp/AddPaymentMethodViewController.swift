@@ -19,6 +19,7 @@ final class AddPaymentMethodViewController: UIViewController, AddPaymentMethodPr
     return textField
   }()
   
+  /// CVC, 유효기간
   private let stackView: UIStackView = {
     let stackView = UIStackView()
     stackView.translatesAutoresizingMaskIntoConstraints = false
