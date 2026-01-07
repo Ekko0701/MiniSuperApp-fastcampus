@@ -1,16 +1,24 @@
 {
-  "object": {
-    "pins": [
-      {
-        "package": "ModernRIBs",
-        "repositoryURL": "https://github.com/DevYeom/ModernRIBs",
-        "state": {
-          "branch": null,
-          "revision": "5e0a67365a1fb18ca06b919dbf53608843ddc284",
-          "version": "1.0.1"
-        }
+  "originHash" : "000cf172f1f80bdfa442a40d604f6227617fa15184fc0fdcc11c70269d53b46c",
+  "pins" : [
+    {
+      "identity" : "combineext",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/CombineCommunity/CombineExt",
+      "state" : {
+        "revision" : "d7b896fa9ca8b47fa7bcde6b43ef9b70bf8c1f56",
+        "version" : "1.8.1"
       }
-    ]
-  },
-  "version": 1
+    },
+    {
+      "identity" : "modernribs",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/DevYeom/ModernRIBs",
+      "state" : {
+        "revision" : "5e0a67365a1fb18ca06b919dbf53608843ddc284",
+        "version" : "1.0.1"
+      }
+    }
+  ],
+  "version" : 3
 }
