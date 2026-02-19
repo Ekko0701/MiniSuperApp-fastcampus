@@ -4,6 +4,8 @@ protocol FinanceHomeRouting: ViewableRouting {
     // TODO: Declare methods the interactor can invoke to manage sub-tree via the router.
     func attachSuperPayDashboard()
     func attachCardOnFileDashboard()
+    func attachAddPaymentMethod()
+    func detachAddPaymentMethod()
 }
 
 protocol FinanceHomePresentable: Presentable {
@@ -15,14 +17,19 @@ protocol FinanceHomeListener: AnyObject {
     // TODO: Declare methods the interactor can invoke to communicate with other RIBs.
 }
 
-final class FinanceHomeInteractor: PresentableInteractor<FinanceHomePresentable>, FinanceHomeInteractable, FinanceHomePresentableListener {
+final class FinanceHomeInteractor: PresentableInteractor<FinanceHomePresentable>, FinanceHomeInteractable, FinanceHomePresentableListener, AdaptivePresentationControllerDelegate {
     
     weak var router: FinanceHomeRouting?
     weak var listener: FinanceHomeListener?
     
+    let presentationDelegateProxy: AdaptivePresentationControllerDelegateProxy
+    
     override init(presenter: FinanceHomePresentable) {
+        self.presentationDelegateProxy = AdaptivePresentationControllerDelegateProxy()
         super.init(presenter: presenter)
         presenter.listener = self
+        
+        self.presentationDelegateProxy.delegate = self
     }
     
     override func didBecomeActive() {
@@ -36,5 +43,23 @@ final class FinanceHomeInteractor: PresentableInteractor<FinanceHomePresentable>
     override func willResignActive() {
         super.willResignActive()
         // TODO: Pause any business logic.
+    }
+    
+    func presentationControllerDidDismiss() {
+        router?.detachAddPaymentMethod()
+    }
+    
+    // MARK: - CardOnFileDashboardListener
+    func cardOnFileDashboardDidTapAddPaymentMethod() {
+        router?.attachAddPaymentMethod()
+    }
+    
+    // MARK: - AddPaymentMethodListener
+    func addPaymentMethodDidTapClose() {
+        router?.detachAddPaymentMethod()
+    }
+    
+    func addPaymentMethodDidAddCard(paymentMethod: PaymentMethod) {
+        router?.detachAddPaymentMethod()
     }
 }

@@ -20,6 +20,7 @@ protocol CardOnFileDashboardPresentable: Presentable {
 
 protocol CardOnFileDashboardListener: AnyObject {
     // TODO: Declare methods the interactor can invoke to communicate with other RIBs.
+    func cardOnFileDashboardDidTapAddPaymentMethod()
 }
 
 protocol CardOnFileDashboardInteractorDependency {
@@ -58,5 +59,9 @@ final class CardOnFileDashboardInteractor: PresentableInteractor<CardOnFileDashb
         // WillResignActive에서 cancellable을 해제해 줘서 위의 클로저에서 [weak self]를 하지 않아도 괜찮다.
         cancellables.forEach { $0.cancel() }
         cancellables.removeAll()
+    }
+    
+    func didTapAddPaymentMethod() {
+        listener?.cardOnFileDashboardDidTapAddPaymentMethod()
     }
 }
